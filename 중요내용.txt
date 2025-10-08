@@ -15,3 +15,5 @@
 ○ 드래곤볼 7개
 	- GameInstance 는 Edit - ProjectSettings - GameInstance 검색후 BP 할당
 	- 나머지는, Window - WorldSettings 패널 추가해서 6개 BP 할당
+
+○ ConstructHelpers_블프		: ConstructHelpers로 주소 가져올 때, 블프 주소는 단순 복붙하면 못읽음. 주소 끝 (' 전에) 에 _C 추가 필요
