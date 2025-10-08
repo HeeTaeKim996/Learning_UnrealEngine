@@ -1,0 +1,17 @@
+○ 
+	- 에디터에서 클래스 생성시, 클래스 선언부 위에 UCLASS() 는 반드시 선언되고, UCLASS 로 선언시, 해당 UOBJECT(모든 부모) 는 GC 의 수거대상이 된다. 
+   	- 하지만 해당 클래스들의 필드 멤버는 작업시 직접 사용자가 'GC 의 수거대상이 아니다' 라는 걸 선언해야 하는데, 이것이 UPROPERTY()이다
+	- 만약 UPROPERTY() 없이 필드 멤버를 UOBject* 로 포인터로만 선언한다면, GC는 해당 오브젝트를 수거하기 때문에, 이후 해당 클래스에서 멤버 조작시, 메모리 오염이 일어나기에 
+	  매우 치명적
+	==>> 꼭 필드멤버가 UObject 일 경우, UPROPERTY() 를 선언하자
+
+○ 모듈 내 서브 디렉터리 사용
+	- 엔진 5.3.2. 에서의, 일부 PC에서만 나오는 문제 같은데, 모듈 내 서브 디렉터리를 인식 못한다. 
+	- 해결법은, 해당 모듈의 ...Build.cs 에,
+		PublicIncludePaths.AddRange(new string[] { "ModuleName" });
+	  위처럼 직접 모듈 자신의 위치 를 지정해줘야 한다
+	- 위 문제는 상대주소로 읽어드리는데, 모듈 내 서브디렉터리를 읽을 때에, 자신의 주소를 인식 못하는? 문제가 5.3.2. 에 있는듯하다
+
+○ 드래곤볼 7개
+	- GameInstance 는 Edit - ProjectSettings - GameInstance 검색후 BP 할당
+	- 나머지는, Window - WorldSettings 패널 추가해서 6개 BP 할당

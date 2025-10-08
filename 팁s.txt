@@ -1,5 +1,52 @@
+■ 기본 에디트 레벨 설정 및 에디트 카메라 이동
 ○ 맵 누르고 Ctrl + N		: 기본 맵 변경
 
 ○ 맵 저장				: 에디터에서 Ctrl + S 로 맵 저장
 
 ○ 시작 맵 설정			: Edit - ProjectSettings - Maps & Modes - Default Maps 와 GameDefaultMap 을 원하는 Map으로 설정
+
+○ 필수 폴더				: Config, Context, Source, uproject 얘내들은 필수, 나머지는 캐시 등 임시 데이터. 나머지 파일들은, uproject -> 우클릭 -> Generate.. 이거 하면 다시 생성됨
+
+○ 레이아웃 설정			: Window - LoadLayout - Classic UE4 가 프로그래머에 무난
+
+
+○ 빛 관련 생성			: Window - Env. LightMixer : Create.. 하면 디펄트로 조합되는 빛 등 새로 생성 
+
+○ Eidt 카메라 이동		: 1) 마우스 우클릭 누른 상태에서, wsad + qe 로 이동. 마우스 드래그로 로테이션 수정 2) 오브젝트 누른 후 F -> 적당한 거리로 이동
+					  3) 오브젝트 선택 후 Alt누르며, 마우스 좌클릭 중 마우스 드래그 -> 해당 오브젝트 중심으로 카메라 로테이션, 포지션 변화
+
+○ 클래스 생성시 자동문구삭제	: Edit - ProjectSettings - Copyright 검색 - CopyrightNotice 문구 수정 (공란)
+
+○ 에디터 코드빌드		: Ctrl + Alt + F11 -> 코드 빌드. (우측 하단과 동일)
+
+■ 블루프린트
+
+○ 블루프린트 연결선 삭제	: Alt 누른 상태에서 선 시작점 누르면 연결선 삭제
+
+○ 선정리 (선꼬기)			: 선 더블클릭하면 선 이동 가능
+
+○ 그룹화				: 노드들 선택후 C	-> 그룹화, 그룹 삭제는 그룹 누르고 Delete
+
+○ Get Set				: Ctrl 누른 상태에서 변수 드래그 드롭 -> Get, Alt 누른 상태에서 변수 드래그 드롭 -> Set
+
+○ nDimension 노드 생성		: 1누르고 왼클릭 -> 1D, 마찬가지 2 -> 2D, 3 -> 3D, 4 -> 4D  노드 생성
+
+○ nD -> Varaible			: 위 nDimension으로 생성된 것을, 우클릭 -> ConvertToVaraible 로 하면 변수로 변경
+
+○ BP Material 인스턴스		: Content Browser 의 메터리얼 BP우클릭 -> CreateMaterialInstance 하면, 기존 BPMaterial 을 가져오되, 기존 BP에서 만든 Variable을 수정 가능
+
+■
+○ Name - String - Text		: Name - const 라 보면 됨. 변경 불가. Hash 를 사용한 빠른 검색이 장점, String - 가장 무난. 수정 가능, Text - 다국어 지원. 영어로 ~, 한국어로 ~ 여러 값 할당
+
+
+■
+○ 코드 UTF8 로 자동할당방법	: VS 에서 코드 생성시, 코드 작성 때에는 한글이 보이지만, 다른 포맷에서 코드를 볼 때 한글이 깨지는 경우가 빈번 (깃등..)  이 때 문제가 되는 코드 파일을, 
+					 다른 이름으로 저장 -> UTF-8(...) 로 저장하면 해당 파일은 해결됨.
+					 하지만 매번 다른 이름으로 저장하면 번거로우므로, 해당 SLN 에서 (또는 언리얼 에디트에서) 새로 생성해도, UTF-8(...) 로 자동생성되게 하려면, 
+					 => 프로젝트 우클릭 -> 추가 -> 새 EditorConfig -> 원하는 파일 선택 후 저장 -> 해당 파일에 editorconfig가 생성됨 -> 해당파일 들어간 후, 
+  					      내용 싹 다 지우고, 
+						root = true    (\n)   [*]  ( \n)  charset = utf-8
+ 					       이렇게 설정하면, 새 코드 생성시, 자동으로 utf-8(...) 로 생성됨
+
+■ 문서 
+○ 모듈 생성 문서			: https://dev.epicgames.com/documentation/ko-kr/unreal-engine/how-to-make-a-gameplay-module-in-unreal-engine

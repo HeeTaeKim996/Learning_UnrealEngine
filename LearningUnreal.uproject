@@ -7,7 +7,17 @@
 		{
 			"Name": "LearningUnreal",
 			"Type": "Runtime",
-			"LoadingPhase": "Default"
+			"LoadingPhase": "Default",
+			"AdditionalDependencies": [
+				"Engine",
+				"CoreUObject"
+			]
+		},
+		{
+
+			"Name": "ModuleTest",
+
+			"Type": "Runtime"
 		}
 	],
 	"Plugins": [
