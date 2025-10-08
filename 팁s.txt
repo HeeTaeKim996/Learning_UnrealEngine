@@ -1,0 +1,5 @@
+○ 맵 누르고 Ctrl + N		: 기본 맵 변경
+
+○ 맵 저장				: 에디터에서 Ctrl + S 로 맵 저장
+
+○ 시작 맵 설정			: Edit - ProjectSettings - Maps & Modes - Default Maps 와 GameDefaultMap 을 원하는 Map으로 설정
