@@ -23,5 +23,15 @@ public:
 
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
-	TObjectPtr<class UStaticMeshComponent> Box;
+	TObjectPtr<class UStaticMeshComponent> Body;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UStaticMeshComponent> Wing;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadWrite)
+	TObjectPtr<class UStaticMeshComponent> Head;
+
+
+	UPROPERTY(EditAnywhere, Category = Battle)
+	TObjectPtr<class AActor> Target;
 };

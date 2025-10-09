@@ -1,0 +1,79 @@
+
+
+
+#include "Player/R1PlayerController.h"
+#include "EnhancedInputComponent.h"
+#include "EnhancedInputSubsystems.h"
+#include "Kismet/KismetMathLibrary.h"
+
+AR1PlayerController::AR1PlayerController(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
+{
+
+}
+
+void AR1PlayerController::BeginPlay()
+{
+	Super::BeginPlay();
+
+	if (UEnhancedInputLocalPlayerSubsystem* SubSystem = ULocalPlayer::GetSubsystem<UEnhancedInputLocalPlayerSubsystem>(GetLocalPlayer()))
+	{
+		SubSystem->AddMappingContext(InputMappingContext, 0);
+	}
+}
+
+
+
+
+void AR1PlayerController::SetupInputComponent()
+{
+	Super::SetupInputComponent();
+
+	if (UEnhancedInputComponent* EnhancedInputComponent = Cast<UEnhancedInputComponent>(InputComponent))
+	{
+		EnhancedInputComponent->BindAction(TestAction, ETriggerEvent::Triggered, this, &ThisClass::Input_Test);
+		EnhancedInputComponent->BindAction(MoveAction, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
+		EnhancedInputComponent->BindAction(TurnAction, ETriggerEvent::Triggered, this, &ThisClass::Input_Turn);
+	}
+}
+
+void AR1PlayerController::Input_Test(const FInputActionValue& InputValue)
+{
+	GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Cyan, TEXT("Test"));
+}
+
+void AR1PlayerController::Input_Move(const FInputActionValue& InputValue)
+{
+	FVector2D MovementVector = InputValue.Get<FVector2D>();
+
+	if (MovementVector.X != 0)
+	{
+#if 0
+		FVector Direction = FVector::ForwardVector * MovementVector.X;
+		GetPawn()->AddActorWorldOffset(Direction *  50.f);
+#else
+		FRotator Rotator = GetControlRotation();
+		FVector Direction = UKismetMathLibrary::GetForwardVector(FRotator(0, Rotator.Yaw, 0));
+		GetPawn()->AddMovementInput(Direction, MovementVector.X); // ※ DeltaTime 은 AddMovementInpt 내부에서 연산되기에, 입력 필요 없음
+#endif
+	}
+	if (MovementVector.Y != 0)
+	{
+#if 0
+		FVector Direction = FVector::RightVector * MovementVector.Y;
+		GetPawn()->AddActorWorldOffset(Direction * 50.f);
+#else
+		FRotator Rotator = GetControlRotation();
+		FVector Direction = UKismetMathLibrary::GetRightVector(FRotator(0, Rotator.Yaw, 0));
+		GetPawn()->AddMovementInput(Direction, MovementVector.Y);
+#endif
+	}
+}
+
+void AR1PlayerController::Input_Turn(const FInputActionValue& InputValue)
+{
+	float val = InputValue.Get<float>();
+
+	UE_LOG(LogTemp, Log, TEXT("%.6f"), val);
+
+	AddYawInput(val);
+}

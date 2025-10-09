@@ -17,3 +17,11 @@
 	- 나머지는, Window - WorldSettings 패널 추가해서 6개 BP 할당
 
 ○ ConstructHelpers_블프		: ConstructHelpers로 주소 가져올 때, 블프 주소는 단순 복붙하면 못읽음. 주소 끝 (' 전에) 에 _C 추가 필요
+
+○ Ctrl _ R + R 주의		: 절대 수정의 검색범위를 전체 솔루션 으로 하면 안된다. 엔진 소스코드가 바뀔 수 있는데, 갈아엎어야 할 수 있음. 웬만하면 검색범위를 '현재 프로젝트' 로 하자
+
+○ TArray.Empty()			: TArray.Empty() 는 IsEmpty() 가 아닌, Clear(). 주의.
+
+○ Yaw Pitch Roll 코드입력주의	: 통용되는 요우(거절회전), 피치(인사회전), 롤(데스롤회전) 은 맞지만, 언리얼은 ZUp, XForward, YRight 이다. BP 에서는 XYZ로 보이지만, 
+	 				  해당 로테이션을 코드에서 FRotator로 입력할 때에는, 피치, 요우, 롤 순서로 입력하기 때문에, 피치(BP에서의 Y), 요우(BP에서의 Z), 롤(BP에서의 X) 순서로 
+					  바꿔서 입력해야 한다.

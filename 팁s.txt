@@ -22,6 +22,11 @@
 ○ 빌드로그 한글깨짐문제	: 일부 PC에서 빌드로그 한글깨짐 발생. 해결을 위해, 제어판 - 시계 및 국가 - 국가 또는 지역 - 관리자 옵션 - 시스템 로캘 변경 - beta: 세계 언어 지원을 위해
 					  UTF-8 사용 체크
 
+○ Input  				: Edit-ProjectSettings 에서의 키설정은 가능하긴 하지만, 여러 플랫폼에 호환되는 키설정을 할당할 때에, 매우 복잡해진다.
+					 이를 위해, Input - InputAction 및 Input - InputMappingContext 를 사용하여, 여러 플랫폼에 대응되는 각각의 세팅을 만들어 관리하는 편이 좋음 
+					 (언리얼5 새 기능) 
+
+
 ■ 블루프린트
 
 ○ 블루프린트 연결선 삭제	: Alt 누른 상태에서 선 시작점 누르면 연결선 삭제
@@ -37,6 +42,7 @@
 ○ nD -> Varaible			: 위 nDimension으로 생성된 것을, 우클릭 -> ConvertToVaraible 로 하면 변수로 변경
 
 ○ BP Material 인스턴스		: Content Browser 의 메터리얼 BP우클릭 -> CreateMaterialInstance 하면, 기존 BPMaterial 을 가져오되, 기존 BP에서 만든 Variable을 수정 가능
+
 
 ■
 ○ Name - String - Text		: Name - const 라 보면 됨. 변경 불가. Hash 를 사용한 빠른 검색이 장점, String - 가장 무난. 수정 가능, Text - 다국어 지원. 영어로 ~, 한국어로 ~ 여러 값 할당

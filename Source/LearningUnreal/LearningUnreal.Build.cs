@@ -8,7 +8,10 @@ public class LearningUnreal : ModuleRules
 	{
 		PCHUsage = PCHUsageMode.UseExplicitOrSharedPCHs;
 	
-		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore", "ModuleTest"});
+		PublicDependencyModuleNames.AddRange(new string[] { "Core", "CoreUObject", "Engine", "InputCore",
+		"EnhancedInput",
+		"ModuleTest",
+        });
 
 		PrivateDependencyModuleNames.AddRange(new string[] {  });
 
