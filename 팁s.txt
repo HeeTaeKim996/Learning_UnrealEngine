@@ -57,5 +57,12 @@
 						root = true    (\n)   [*]  ( \n)  charset = utf-8
  					       이렇게 설정하면, 새 코드 생성시, 자동으로 utf-8(...) 로 생성됨
 
+■ EnhancedInput
+ 	- All - Contents - Input 파일 참조.
+	- IA 계열은, ValueType만 할당하면 됨 (bool, 1D, 2D, 3D..)
+	- IMC 에서 세부 할당. 특히 Modifiers 의 Negate(부호 반대), SwizzleInputAxisValues ( 그냥 Y축 사용이라 이해하자) 
+	- Build.cs 에서 모듈 EnhancedInput 추가 필요
+
 ■ 문서 
 ○ 모듈 생성 문서			: https://dev.epicgames.com/documentation/ko-kr/unreal-engine/how-to-make-a-gameplay-module-in-unreal-engine
+

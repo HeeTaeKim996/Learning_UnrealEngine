@@ -32,6 +32,7 @@ private:
 	void Input_Turn(const FInputActionValue& InputValue);
 
 protected:
+#if 0 // (초기버전) 블루프린트에 직접 할당
 	UPROPERTY(EditAnywhere, Category = Input)
 	TObjectPtr<class UInputMappingContext> InputMappingContext;
 
@@ -43,4 +44,5 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = Input)
 	TObjectPtr<class UInputAction> TurnAction;
+#endif
 };
