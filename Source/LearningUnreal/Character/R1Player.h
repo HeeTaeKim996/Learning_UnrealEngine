@@ -3,52 +3,30 @@
 #pragma once
 
 #include "CoreMinimal.h"
-#include "GameFramework/Character.h"
-#include "R1Character.generated.h"
+#include "Character/R1Character.h"
+#include "R1Player.generated.h"
 
+/**
+ * 
+ */
 UCLASS()
-class LEARNINGUNREAL_API AR1Character : public ACharacter
+class LEARNINGUNREAL_API AR1Player : public AR1Character
 {
 	GENERATED_BODY()
-
+	
 public:
-	AR1Character();
+	AR1Player();
 
 protected:
 	virtual void BeginPlay() override;
 
-public:	
+public:
 	virtual void Tick(float DeltaTime) override;
-
-	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 protected:
-#if 0 // R1Player 로 이동
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class USpringArmComponent> SpringArm;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UCameraComponent> Camera;
-#endif
 };

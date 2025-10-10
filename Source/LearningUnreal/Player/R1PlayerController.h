@@ -30,6 +30,9 @@ private:
 	void Input_Test(const FInputActionValue& InputValue);
 	void Input_Move(const FInputActionValue& InputValue);
 	void Input_Turn(const FInputActionValue& InputValue);
+	void Input_Jump(const FInputActionValue& InputValue);
+	void Input_Attack(const FInputActionValue& InputValue);
+
 
 protected:
 #if 0 // (초기버전) 블루프린트에 직접 할당

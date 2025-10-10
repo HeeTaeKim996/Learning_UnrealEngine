@@ -1,43 +1,43 @@
 
 
 
-#include "Character/R1Character.h"
+#include "Character/R1Player.h"
+#include "GameFramework/SpringArmComponent.h"
+#include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 
-AR1Character::AR1Character()
+
+AR1Player::AR1Player()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-#if 0 // R1Player 로 이동
+
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
-	
+
 	SpringArm = CreateDefaultSubobject<USpringArmComponent>(TEXT("SpringArmComponent"));
 	SpringArm->SetupAttachment(GetCapsuleComponent());
 	SpringArm->TargetArmLength = 700.f;
 	SpringArm->bUsePawnControlRotation = true;
+	//SpringArm->SetRelativeRotation(FRotator(-30.f, 0, 0));
 
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
-#endif 
+
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -88.f), FRotator(0, -90.f, 0));
+
 }
 
-void AR1Character::BeginPlay()
+void AR1Player::BeginPlay()
 {
 	Super::BeginPlay();
-	
+
+	GetController()->SetControlRotation(FRotator(-30.f, 0, 0));
 }
 
-void AR1Character::Tick(float DeltaTime)
+void AR1Player::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
 }
-
-void AR1Character::SetupPlayerInputComponent(UInputComponent* PlayerInputComponent)
-{
-	Super::SetupPlayerInputComponent(PlayerInputComponent);
-
-}
-
