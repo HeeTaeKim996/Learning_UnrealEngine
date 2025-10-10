@@ -12,6 +12,10 @@ public class LearningUnreal : ModuleRules
 
 		"EnhancedInput", "GameplayTags",
 
+		"NavigationSystem"/*네비게이션(탑다운)*/, "AIModule"/*인공지능*/ , "Niagara"/*커서이펙트*/,
+
+
+
 		"ModuleTest",
         });
 

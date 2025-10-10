@@ -12,7 +12,7 @@ AR1Player::AR1Player()
 {
 	PrimaryActorTick.bCanEverTick = true;
 
-
+#ifdef USE_TPS_CONTROLL
 	bUseControllerRotationYaw = false;
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
@@ -26,14 +26,46 @@ AR1Player::AR1Player()
 	Camera->SetupAttachment(SpringArm);
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -88.f), FRotator(0, -90.f, 0));
+#endif
 
+	bUseControllerRotationPitch = false;
+	bUseControllerRotationRoll = false;
+	bUseControllerRotationYaw = false;
+
+	GetCharacterMovement()->bOrientRotationToMovement = true;
+
+	GetCharacterMovement()->RotationRate = FRotator(0, 640.f, 0);
+
+	SpringArm = CreateDefaultSubobject<USpringArmComponent>("SpringArm");
+	SpringArm->SetupAttachment(GetCapsuleComponent());
+	SpringArm->TargetArmLength = 800.f;
+	SpringArm->SetRelativeRotation(FRotator(-60, 0, 0));
+
+	
+	{ // ※ 이걸 해야 화면 안돌아감
+		SpringArm->bUsePawnControlRotation = false;
+		SpringArm->bInheritPitch = false;
+		SpringArm->bInheritYaw = false;
+		SpringArm->bInheritRoll = false;
+	}
+
+
+
+
+	Camera = CreateDefaultSubobject<UCameraComponent>("Camera");
+	Camera->SetupAttachment(SpringArm);
+	Camera->bUsePawnControlRotation = false;
+
+	GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -88.f), FRotator(0, -90.f, 0));
 }
 
 void AR1Player::BeginPlay()
 {
 	Super::BeginPlay();
 
+#ifdef USE_TPS_CONTROLL
 	GetController()->SetControlRotation(FRotator(-30.f, 0, 0));
+#endif
 }
 
 void AR1Player::Tick(float DeltaTime)

@@ -74,4 +74,8 @@ Plugins/**/Intermediate/*
 # Cache files for the editor to use
 DerivedDataCache/*
 
+# Ignore IPCH
 *.ipch
+
+# Ignore Packages
+Content/_Arts/ParagonGreystone/

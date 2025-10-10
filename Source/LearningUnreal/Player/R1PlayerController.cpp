@@ -10,8 +10,20 @@
 #include "R1GameplayTags.h"
 #include "Character/R1Player.h"
 
+#include "Blueprint/AIBlueprintHelperLibrary.h"
+#include "NiagaraSystem.h"
+#include "NiagaraFunctionLibrary.h"
+
+#include "GameFramework/CharacterMovementComponent.h"
+
 AR1PlayerController::AR1PlayerController(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
+	bShowMouseCursor = true;
+	DefaultMouseCursor = EMouseCursor::Default;
+	CachedDestination = FVector::ZeroVector;
+	FollowTime = 0.f;
+
+
 
 }
 
@@ -31,6 +43,14 @@ void AR1PlayerController::BeginPlay()
 		{
 			SubSystem->AddMappingContext(InputData->InputMappingContext, 0);
 		}
+	}
+#endif
+
+#if 0
+	ACharacter* C = Cast<ACharacter>(GetPawn());
+	if (C)
+	{
+		C->GetCharacterMovement()->bUseAccelerationForPathFollowing = true;
 	}
 #endif
 }
@@ -54,6 +74,7 @@ void AR1PlayerController::SetupInputComponent()
 	{
 		UEnhancedInputComponent* EnhancedInputComponent = CastChecked<UEnhancedInputComponent>(InputComponent);
 
+#ifdef USE_TPS_CONTROLL
 		auto Action1 = InputData->FindInputActionByTag(R1GameplayTags::Input_Action_Move);
 		EnhancedInputComponent->BindAction(Action1, ETriggerEvent::Triggered, this, &ThisClass::Input_Move);
 
@@ -65,10 +86,23 @@ void AR1PlayerController::SetupInputComponent()
 
 		auto Action4 = InputData->FindInputActionByTag(R1GameplayTags::Input_Action_Attack);
 		EnhancedInputComponent->BindAction(Action4, ETriggerEvent::Triggered, this, &ThisClass::Input_Attack);
+#endif
+
+		auto Action1 = InputData->FindInputActionByTag(R1GameplayTags::Input_Action_SetDestination);
+
+		EnhancedInputComponent->BindAction(Action1, ETriggerEvent::Started, this, &ThisClass::OnInputStarted);
+		EnhancedInputComponent->BindAction(Action1, ETriggerEvent::Triggered, this, &ThisClass::OnSetDestinationTriggered);
+		EnhancedInputComponent->BindAction(Action1, ETriggerEvent::Completed, this, &ThisClass::OnSetDestinationReleased);
+		//EnhancedInputComponent->BindAction(Action1, ETriggerEvent::Canceled, this, &ThisClass::OnSetDestinationReleased);
 	}
 #endif
+
+
+
+
 }
 
+#ifdef USE_TPS_CONTROLL
 void AR1PlayerController::Input_Test(const FInputActionValue& InputValue)
 {
 	GEngine->AddOnScreenDebugMessage(0, 1.0f, FColor::Cyan, TEXT("Test"));
@@ -117,10 +151,72 @@ void AR1PlayerController::Input_Jump(const FInputActionValue& InputValue)
 	{
 		R1Player->Jump();
 	}
-	
 }
 
 void AR1PlayerController::Input_Attack(const FInputActionValue& InputValue)
 {
 	UE_LOG(LogTemp, Log, TEXT("Attack Inputed"));
+}
+#endif
+
+void AR1PlayerController::OnInputStarted()
+{
+	StopMovement();
+}
+
+void AR1PlayerController::OnSetDestinationTriggered()
+{
+	FollowTime += GetWorld()->GetDeltaSeconds();
+
+	FHitResult Hit;
+	bool bHitSuccessful = GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit);
+
+	if (bHitSuccessful)
+	{
+		CachedDestination = Hit.Location;
+	}
+
+	APawn* ControlledPawn = GetPawn();
+	if (ControlledPawn != nullptr)
+	{
+		FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
+		ControlledPawn->AddMovementInput(WorldDirection, 1.0f, false);
+	}
+
+
+
+}
+
+void AR1PlayerController::OnSetDestinationReleased()
+{
+
+	if (FollowTime <= ShortPressThreshold)
+	{
+		{
+#if 0 // 디버그
+			if (FXCursor == nullptr)
+			{
+				UE_LOG(LogTemp, Warning, TEXT("FXCursor is nullptr"));
+			}
+			else
+			{
+				UE_LOG(LogTemp, Warning, TEXT("FXCursor loaded: %s"), *FXCursor->GetName());
+			}
+#endif
+		}
+
+
+		// ※ 짧게 클릭했을 때, (1) AI 로 해당 장소로 이동 명령을 내리고, (2) 해당 좌표에 FXCursor 를 생성하는 코드
+
+		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, CachedDestination); // ※ @@ 네브메시 가 맵에 할당돼야 이동한다!!!
+		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FXCursor, CachedDestination, FRotator::ZeroRotator,
+			FVector(1.f, 1.f, 1.f), true, true, ENCPoolMethod::None, true); // ※ 현재 블프로 할당된 커서 자체에 문제가 있어서 안보일거다 그냥 무시하고 넘어감
+
+
+
+
+	}
+
+	FollowTime = 0.f;
+
 }

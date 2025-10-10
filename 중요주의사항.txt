@@ -25,3 +25,8 @@
 ○ Yaw Pitch Roll 코드입력주의	: 통용되는 요우(거절회전), 피치(인사회전), 롤(데스롤회전) 은 맞지만, 언리얼은 ZUp, XForward, YRight 이다. BP 에서는 XYZ로 보이지만, 
 	 				  해당 로테이션을 코드에서 FRotator로 입력할 때에는, 피치, 요우, 롤 순서로 입력하기 때문에, 피치(BP에서의 Y), 요우(BP에서의 Z), 롤(BP에서의 X) 순서로 
 					  바꿔서 입력해야 한다.
+
+○ VirtualShadowMap Vs Shaodw Map
+	- 자세히 공부하지는 않았지만, 5.2. 버전 이전이 ShadowMap. Virtual 은 이후 추가 된 기능. 디펄트로 VirtualShadowMap 이 지정되는데, 이전 에셋들을 가져와서 사용하면, 애니매이션
+	  등 재생할 때 깨져보여서 나옴. 
+	- 따라서 ShadowMap 할당 권장. Edit - ProjectSettings - 'ShadowMap' 검색 - Shadow Map Method 를 virtual 에서 ShadowMap으로 수정

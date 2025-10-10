@@ -7,6 +7,7 @@
 #include "R1PlayerController.generated.h"
 
 struct FInputActionValue;
+class UNiagaraSystem;
 
 /**
  * 
@@ -26,16 +27,17 @@ protected:
 protected:
 	virtual void SetupInputComponent() override;
 
+#ifdef USE_TPS_CONTROLL
 private:
 	void Input_Test(const FInputActionValue& InputValue);
 	void Input_Move(const FInputActionValue& InputValue);
 	void Input_Turn(const FInputActionValue& InputValue);
 	void Input_Jump(const FInputActionValue& InputValue);
 	void Input_Attack(const FInputActionValue& InputValue);
+#endif
 
-
-protected:
 #if 0 // (초기버전) 블루프린트에 직접 할당
+protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	TObjectPtr<class UInputMappingContext> InputMappingContext;
 
@@ -48,4 +50,22 @@ protected:
 	UPROPERTY(EditAnywhere, Category = Input)
 	TObjectPtr<class UInputAction> TurnAction;
 #endif
+
+
+private:
+	void OnInputStarted();
+	void OnSetDestinationTriggered();
+	void OnSetDestinationReleased();
+
+public:
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	float ShortPressThreshold = 0.3f;
+
+	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
+	TObjectPtr<UNiagaraSystem> FXCursor;
+
+private:
+	FVector CachedDestination;
+	float FollowTime;
+
 };

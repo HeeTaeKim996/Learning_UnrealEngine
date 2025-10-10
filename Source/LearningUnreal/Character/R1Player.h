@@ -9,6 +9,9 @@
 /**
  * 
  */
+
+//#define USE_TPS_CONTROLL
+
 UCLASS()
 class LEARNINGUNREAL_API AR1Player : public AR1Character
 {

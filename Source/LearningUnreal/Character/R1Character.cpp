@@ -21,6 +21,8 @@ AR1Character::AR1Character()
 	Camera = CreateDefaultSubobject<UCameraComponent>(TEXT("Camera"));
 	Camera->SetupAttachment(SpringArm);
 #endif 
+
+
 }
 
 void AR1Character::BeginPlay()
