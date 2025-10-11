@@ -62,5 +62,29 @@
 ■ 리타겟팅
  ※ 생략함. 내용은 다른 본의 애니매이션을 사용하고 싶을 때, 둘을 매핑시켜, 애니매이션을 사용하는 방법. 강의 섹션5. 30. 리타겟팅 강의 참조
 
-■ 애니매이션몽타주
+■ 애니매이션 몽타주
  ※ 생략함. 유니티의 UpperBone, LowerBone 나눠서 애니매이션 재생시키는 거였나.. 그부분. 강의 섹션5. 31. 애니매이션 몽타주 참조.
+
+■ Collision
+  □ 기본 개요
+	- BP 보면서 공부. BP에서 Collision(Box, Capsule, Sphere) 클릭해서, 우측의 Collision - CollisionPresets 보며 공부. 
+	- 위 CollisionPresets 는 순서대로, CollisionEnabled(말그대로), ObjectType(자신), 하단의 체크는 상대방 Collision 과의 충돌에서 어떻게 처리할지 에 대한 유무
+	- Query 와 Physics 가 있는데, Physics는 실제 충돌, Query는 레이, 이동 예정 경로에 대한 충돌 등 판정.
+	- Ignore 는 충돌 판정 무시, Overlap 은 유니티의 Trigger, Block 은 충돌 판정.
+	 ※ Overlap 이 사용되려면, Generate Overlap Events 가 체크돼야 함
+	- A 는 B를 Block, B는 A를 Overlap 으로 한다면, Overlap으로 판정 ( 더 낮은 레벨 Ignroe < Overlap < Block 로 판정 )
+  □ Preset, Object, Trace
+	- Edit - ProjectSettings - Engine - Collision - (Object, Trace, Preset) 에서 추가 및 할당
+	- 위 기본개요에서 설정한 내용들을, Edit에서 미리설정하고, 할당할 수 있음
+	  ※ 새로 추가된 Preset을, 이미 만들어졌던 Preset들은 모두 기본 Ignore로 할당되니, 번거롭지만, 이미 만들어졌던 Preset들을 하나 하나 새로 만든 Preset과의 충돌 범주를 할당해야 함
+	-  위 ProjectSettings 에서 Preset은 어떻게 판정할지 에 대한 것. ObjectType 은 주로 판정'받을' 대상, Trace 는 판정'될' 대상. 
+	  (이게 말로하니 좀 애매하게 이상하네,, Preset으로 판정에 대해 어떻게 처리할지 를 묻고, ObjectTtype은 발동 주체가 탐지하는 '대상', Trace는 발동 주체 자신이 탐지되는 대상 )
+	 ※ 위 Channel, 과 ObjectType 의 차이를 확인하기 위해 BP_Player 에서 BP 로 마우스 우클릭 으로 확인하는 실습을 해봤다. 	
+	
+  ○ Delegate
+	- 번외로 Delegate에 대해 공부. C#의 delegate를 cpp 인 언리얼에서 모방. 기본적인 구조는 만들었었던 Server의 Job, 엔진의 Timer 와 기본적인 구조가 동일함.
+	- template typename T를 발동주체로 정의 및 저장. decltype 와 Args였나.. 그걸로 인자 받고, delegate 의 +=, -= 처럼, AddDynamic 시, vector 에 해당 타입을 저장하고, 발동시 호출
+	  하는 구조라 함
+	※ 팁으로 AddDynamic 을 하는 함수를 만들 때, 인자가 많을텐데, 이걸 직접 타이핑하긴 어려우니, A.Dynamic 에서 A를 F12 로 타고 올라가고, 왼쪽 의 매크로를 타고 올라가면,
+	   매개변수를 복붙할 수 있음. 여기서 첫번째, 두번째 인자까지였나.. 는 발동 주체와 함수명에 대한 거고, 이후부터가 인자일 거다. 함수명 보고 그 이후는 인자구나 생각하고 복붙하면 
+           됨. 

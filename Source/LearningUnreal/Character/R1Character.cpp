@@ -22,7 +22,7 @@ AR1Character::AR1Character()
 	Camera->SetupAttachment(SpringArm);
 #endif 
 
-
+	GetCapsuleComponent()->SetCollisionProfileName(TEXT("Character"));
 }
 
 void AR1Character::BeginPlay()
@@ -41,5 +41,15 @@ void AR1Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 {
 	Super::SetupPlayerInputComponent(PlayerInputComponent);
 
+}
+
+void AR1Character::Highlight()
+{
+	bHighlighted = true;
+}
+
+void AR1Character::UnHighlight()
+{
+	bHighlighted = false;
 }
 

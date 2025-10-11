@@ -8,6 +8,7 @@
 
 struct FInputActionValue;
 class UNiagaraSystem;
+class AR1Character;
 
 /**
  * 
@@ -22,10 +23,8 @@ public:
 
 protected:
 	virtual void BeginPlay() override;
-
-
-protected:
 	virtual void SetupInputComponent() override;
+	virtual void PlayerTick(float DeltaTime) override;
 
 #ifdef USE_TPS_CONTROLL
 private:
@@ -51,6 +50,9 @@ protected:
 	TObjectPtr<class UInputAction> TurnAction;
 #endif
 
+private:
+	void TickCursorTrace();
+
 
 private:
 	void OnInputStarted();
@@ -67,5 +69,11 @@ public:
 private:
 	FVector CachedDestination;
 	float FollowTime;
+	bool bMousePressed = false;
 
+protected:
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<AR1Character> TargetActor;
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<AR1Character> HighlightActor;
 };

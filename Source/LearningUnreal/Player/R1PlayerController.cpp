@@ -159,6 +159,52 @@ void AR1PlayerController::Input_Attack(const FInputActionValue& InputValue)
 }
 #endif
 
+
+void AR1PlayerController::PlayerTick(float DeltaTime) 
+{
+	Super::PlayerTick(DeltaTime);
+
+	TickCursorTrace();
+}
+
+
+
+void AR1PlayerController::TickCursorTrace()
+{
+	if (bMousePressed) return;
+
+	FHitResult Hit;
+	if (GetHitResultUnderCursor(ECollisionChannel::ECC_Visibility, true, Hit) == false) return;
+
+	AR1Character* TempHighlightActor = Cast<AR1Character>(Hit.GetActor());
+	if (TempHighlightActor == nullptr)
+	{
+		if (HighlightActor)
+		{
+			HighlightActor->UnHighlight();
+		}
+	}
+	else
+	{
+		if (HighlightActor)
+		{
+			if (HighlightActor != TempHighlightActor)
+			{
+				HighlightActor->UnHighlight();
+				TempHighlightActor->Highlight();
+			}
+		}
+		else
+		{
+			TempHighlightActor->Highlight();
+		}
+	}
+
+	HighlightActor = TempHighlightActor;
+}
+
+
+
 void AR1PlayerController::OnInputStarted()
 {
 	StopMovement();

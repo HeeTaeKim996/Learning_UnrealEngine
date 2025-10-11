@@ -6,7 +6,7 @@
 #include "Camera/CameraComponent.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
-
+#include "Components/CapsuleComponent.h"
 
 AR1Player::AR1Player()
 {
@@ -57,6 +57,11 @@ AR1Player::AR1Player()
 	Camera->bUsePawnControlRotation = false;
 
 	GetMesh()->SetRelativeLocationAndRotation(FVector(0, 0, -88.f), FRotator(0, -90.f, 0));
+
+
+	UCapsuleComponent* capsule = GetCapsuleComponent();
+	capsule->SetCollisionEnabled(ECollisionEnabled::QueryAndPhysics);
+	
 }
 
 void AR1Player::BeginPlay()
@@ -66,10 +71,19 @@ void AR1Player::BeginPlay()
 #ifdef USE_TPS_CONTROLL
 	GetController()->SetControlRotation(FRotator(-30.f, 0, 0));
 #endif
-}
+
+
+	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnBeginOverlap);
+} 
 
 void AR1Player::Tick(float DeltaTime)
 {
 	Super::Tick(DeltaTime);
 
+}
+
+void AR1Player::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, 
+	bool bFromSweep, const FHitResult& SweepResult)
+{
+	UE_LOG(LogTemp, Log, TEXT("OnBeginOverlap"));
 }
