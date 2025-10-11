@@ -15,4 +15,8 @@ namespace R1GameplayTags
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Action_Attack);
 
 	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Input_Action_SetDestination);
+
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Animation_Begin);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Animation_End);
+	UE_DECLARE_GAMEPLAY_TAG_EXTERN(Event_Animation_Attack);
 }

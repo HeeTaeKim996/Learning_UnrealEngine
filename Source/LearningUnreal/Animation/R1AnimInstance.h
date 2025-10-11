@@ -21,6 +21,10 @@ public:
 	virtual void NativeInitializeAnimation() override;
 	virtual void NativeUpdateAnimation(float DeltaSeconds) override;
 
+
+public:
+	void SetAttack(bool InIsAttacking) { isAttacking = InIsAttacking; }
+
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<class AR1Player> Character;
@@ -36,4 +40,6 @@ protected:
 	bool bShouldMove = false;
 	UPROPERTY(BlueprintReadOnly)
 	bool bIsFalling = false;
+	UPROPERTY(BlueprintReadOnly)
+	bool isAttacking = false;
 };

@@ -4,6 +4,7 @@
 #include "Character/R1Character.h"
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
+#include "R1Define.h"
 
 AR1Character::AR1Character()
 {
@@ -51,5 +52,24 @@ void AR1Character::Highlight()
 void AR1Character::UnHighlight()
 {
 	bHighlighted = false;
+}
+
+void AR1Character::OnDamage(int32 Damage, TObjectPtr<AR1Character> from)
+{
+	Hp = FMath::Clamp(Hp - Damage, 0, MaxHp);
+
+	if (Hp == 0)
+	{
+		OnDead(from);
+	}
+
+	D(FString::Printf(TEXT("%d"), Hp));
+}
+
+void AR1Character::OnDead(TObjectPtr<AR1Character> from)
+{
+	if (CreatureState == ECreatureState::Dead) return;
+
+	CreatureState = ECreatureState::Dead;
 }
 

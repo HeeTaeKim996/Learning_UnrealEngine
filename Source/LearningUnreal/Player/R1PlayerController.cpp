@@ -15,6 +15,7 @@
 #include "NiagaraFunctionLibrary.h"
 
 #include "GameFramework/CharacterMovementComponent.h"
+#include "Animation/R1AnimInstance.h"
 
 AR1PlayerController::AR1PlayerController(const FObjectInitializer& ObjectInitializer) : Super(ObjectInitializer)
 {
@@ -53,6 +54,10 @@ void AR1PlayerController::BeginPlay()
 		C->GetCharacterMovement()->bUseAccelerationForPathFollowing = true;
 	}
 #endif
+
+
+	R1Player = Cast<AR1Player>(GetCharacter());
+	PlayerAnim = Cast<UR1AnimInstance>(R1Player->GetMesh()->GetAnimInstance());
 }
 
 
@@ -116,7 +121,7 @@ void AR1PlayerController::Input_Move(const FInputActionValue& InputValue)
 	{
 #if 0
 		FVector Direction = FVector::ForwardVector * MovementVector.X;
-		GetPawn()->AddActorWorldOffset(Direction *  50.f);
+		GetPawn()->AddActorWorldOffset(Direction * 50.f);
 #else
 		FRotator Rotator = GetControlRotation();
 		FVector Direction = UKismetMathLibrary::GetForwardVector(FRotator(0, Rotator.Yaw, 0));
@@ -160,11 +165,12 @@ void AR1PlayerController::Input_Attack(const FInputActionValue& InputValue)
 #endif
 
 
-void AR1PlayerController::PlayerTick(float DeltaTime) 
+void AR1PlayerController::PlayerTick(float DeltaTime)
 {
 	Super::PlayerTick(DeltaTime);
 
 	TickCursorTrace();
+	ChaseTargetAndAttack();
 }
 
 
@@ -203,15 +209,58 @@ void AR1PlayerController::TickCursorTrace()
 	HighlightActor = TempHighlightActor;
 }
 
+void AR1PlayerController::ChaseTargetAndAttack()
+{
+	if (TargetActor == nullptr) return;
+
+	{
+		ECreatureState state = GetCreatureState();
+		if (state == ECreatureState::Dead) return;
+	}
+
+	FVector Direction =	TargetActor->GetActorLocation() - R1Player->GetActorLocation();
+	
+	float DirLength = Direction.Length();
+	if (DirLength < 250.f)
+	{
+		
+
+
+		GEngine->AddOnScreenDebugMessage(0, 1.f, FColor::Cyan, TEXT("Attack"));
+
+		
+		SetAttack(true);
+
+		FRotator Rotator = UKismetMathLibrary::FindLookAtRotation(R1Player->GetActorLocation(), TargetActor->GetActorLocation());
+		R1Player->SetActorRotation(Rotator);
+
+
+	}
+	else
+	{
+		Direction /= DirLength; 
+		R1Player->AddMovementInput(Direction, 1.f, false);
+
+		SetAttack(false);
+	}
+}
+
 
 
 void AR1PlayerController::OnInputStarted()
 {
 	StopMovement();
+
+	bMousePressed = true;
+	TargetActor = HighlightActor;
 }
 
 void AR1PlayerController::OnSetDestinationTriggered()
 {
+	if (TargetActor) return;
+
+	SetAttack(false);
+
 	FollowTime += GetWorld()->GetDeltaSeconds();
 
 	FHitResult Hit;
@@ -222,11 +271,10 @@ void AR1PlayerController::OnSetDestinationTriggered()
 		CachedDestination = Hit.Location;
 	}
 
-	APawn* ControlledPawn = GetPawn();
-	if (ControlledPawn != nullptr)
+	if (R1Player)
 	{
-		FVector WorldDirection = (CachedDestination - ControlledPawn->GetActorLocation()).GetSafeNormal();
-		ControlledPawn->AddMovementInput(WorldDirection, 1.0f, false);
+		FVector WorldDirection = (CachedDestination - R1Player->GetActorLocation()).GetSafeNormal();
+		R1Player->AddMovementInput(WorldDirection, 1.0f, false);
 	}
 
 
@@ -235,34 +283,61 @@ void AR1PlayerController::OnSetDestinationTriggered()
 
 void AR1PlayerController::OnSetDestinationReleased()
 {
+	bMousePressed = false;
+
+
 
 	if (FollowTime <= ShortPressThreshold)
 	{
+		if (TargetActor == nullptr)
 		{
-#if 0 // 디버그
-			if (FXCursor == nullptr)
-			{
-				UE_LOG(LogTemp, Warning, TEXT("FXCursor is nullptr"));
-			}
-			else
-			{
-				UE_LOG(LogTemp, Warning, TEXT("FXCursor loaded: %s"), *FXCursor->GetName());
-			}
-#endif
+			// ※ 짧게 클릭했을 때, (1) AI 로 해당 장소로 이동 명령을 내리고, (2) 해당 좌표에 FXCursor 를 생성하는 코드
+			UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, CachedDestination); // ※ @@ 네브메시 가 맵에 할당돼야 이동한다!!!
+			UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FXCursor, CachedDestination, FRotator::ZeroRotator,
+				FVector(1.f, 1.f, 1.f), true, true, ENCPoolMethod::None, true); // ※ 현재 블프로 할당된 커서 자체에 문제가 있어서 안보일거다 그냥 무시하고 넘어감
 		}
-
-
-		// ※ 짧게 클릭했을 때, (1) AI 로 해당 장소로 이동 명령을 내리고, (2) 해당 좌표에 FXCursor 를 생성하는 코드
-
-		UAIBlueprintHelperLibrary::SimpleMoveToLocation(this, CachedDestination); // ※ @@ 네브메시 가 맵에 할당돼야 이동한다!!!
-		UNiagaraFunctionLibrary::SpawnSystemAtLocation(this, FXCursor, CachedDestination, FRotator::ZeroRotator,
-			FVector(1.f, 1.f, 1.f), true, true, ENCPoolMethod::None, true); // ※ 현재 블프로 할당된 커서 자체에 문제가 있어서 안보일거다 그냥 무시하고 넘어감
-
-
-
-
 	}
 
 	FollowTime = 0.f;
 
+}
+
+ECreatureState AR1PlayerController::GetCreatureState()
+{
+	if (R1Player)
+	{
+		return R1Player->CreatureState;
+	}
+	return ECreatureState::None;
+}
+
+
+void AR1PlayerController::SetCreatureState(ECreatureState InState)
+{
+	if (R1Player)
+	{
+		R1Player->CreatureState = InState;
+	}
+}
+
+void AR1PlayerController::HandleGameplayEvent(FGameplayTag eventTag)
+{
+	if (eventTag.MatchesTag(R1GameplayTags::Event_Animation_Attack))
+	{
+		if (TargetActor)
+		{
+			TargetActor->OnDamage(R1Player->FinalDamage, R1Player);
+		}
+	}
+}
+
+void AR1PlayerController::SetAttack(bool InIsAttacking)
+{
+	if (isAttacking == InIsAttacking) return;
+
+	isAttacking = InIsAttacking;
+	if (PlayerAnim)
+	{
+		PlayerAnim->SetAttack(InIsAttacking);
+	}
 }

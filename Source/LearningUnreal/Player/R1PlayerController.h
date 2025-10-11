@@ -4,6 +4,8 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/PlayerController.h"
+#include "R1Define.h"
+#include "GameplayTagContainer.h"
 #include "R1PlayerController.generated.h"
 
 struct FInputActionValue;
@@ -52,12 +54,19 @@ protected:
 
 private:
 	void TickCursorTrace();
-
+	void ChaseTargetAndAttack();
 
 private:
 	void OnInputStarted();
 	void OnSetDestinationTriggered();
 	void OnSetDestinationReleased();
+
+
+	ECreatureState GetCreatureState();
+	void SetCreatureState(ECreatureState InState);
+
+public:
+	void HandleGameplayEvent(FGameplayTag eventTag);
 
 public:
 	UPROPERTY(EditAnywhere, BlueprintReadOnly, Category = Input)
@@ -70,10 +79,19 @@ private:
 	FVector CachedDestination;
 	float FollowTime;
 	bool bMousePressed = false;
+	bool isAttacking = false;
+
+private:
+	void SetAttack(bool InIsAttacking);
+	
 
 protected:
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<AR1Character> TargetActor;
 	UPROPERTY(BlueprintReadOnly)
 	TObjectPtr<AR1Character> HighlightActor;
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<class AR1Player> R1Player;
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<class UR1AnimInstance> PlayerAnim;
 };

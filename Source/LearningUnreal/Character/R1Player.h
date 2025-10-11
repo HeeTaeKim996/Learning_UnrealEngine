@@ -31,9 +31,14 @@ private:
 	void OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, 
 		int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
 
+public:
+	virtual void HandleGameplayEvent(FGameplayTag EventTag) override;
+
 protected:
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class USpringArmComponent> SpringArm;
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
 	TObjectPtr<class UCameraComponent> Camera;
+	UPROPERTY(BlueprintReadOnly)
+	TObjectPtr<class AR1PlayerController> PlayerController;
 };

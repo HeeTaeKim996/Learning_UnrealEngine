@@ -7,6 +7,7 @@
 #include "Components/CapsuleComponent.h"
 #include "GameFramework/CharacterMovementComponent.h"
 #include "Components/CapsuleComponent.h"
+#include "Player/R1PlayerController.h"
 
 AR1Player::AR1Player()
 {
@@ -74,6 +75,8 @@ void AR1Player::BeginPlay()
 
 
 	GetCapsuleComponent()->OnComponentBeginOverlap.AddDynamic(this, &ThisClass::OnBeginOverlap);
+
+	PlayerController = Cast<AR1PlayerController>(GetController());
 } 
 
 void AR1Player::Tick(float DeltaTime)
@@ -86,4 +89,12 @@ void AR1Player::OnBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor*
 	bool bFromSweep, const FHitResult& SweepResult)
 {
 	UE_LOG(LogTemp, Log, TEXT("OnBeginOverlap"));
+}
+
+void AR1Player::HandleGameplayEvent(FGameplayTag EventTag)
+{
+	if (PlayerController)
+	{
+		PlayerController->HandleGameplayEvent(EventTag);
+	}
 }
