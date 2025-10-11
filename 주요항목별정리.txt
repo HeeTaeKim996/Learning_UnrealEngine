@@ -90,5 +90,20 @@
            됨. 
 
 ■ EventTrigger
- - 애니매이션의 이벤트 트리거. 기존의 그 불친절한 책과 거의 동일하나, 차이점은 UR1AnimNotify_SendGameplayEvent 를 사용한다는 점이다.
- - 코드 보면 이해는 될테고, 그외에 설명할 건 없음. 이벤트 트리거 할당은 불친절 책과 동일. 할당하고, BP에서 우측에 Tag만 설정하기 
+ 	- 애니매이션의 이벤트 트리거. 기존의 그 불친절한 책과 거의 동일하나, 차이점은 UR1AnimNotify_SendGameplayEvent 를 사용한다는 점이다.
+ 	- 코드 보면 이해는 될테고, 그외에 설명할 건 없음. 이벤트 트리거 할당은 불친절 책과 동일. 할당하고, BP에서 우측에 Tag만 설정하기 
+
+
+■ PostProcess
+  □ 외곽선 그리기 
+	 ※ 작업 과정이 복잡하니, 강의 'PostProcess' 를 검색해서 보는 걸 추천
+
+	- ProjectSettings - 'Stencil' 검색 -PostProcessing 을 'Enabled With Stencil' 으로 변경
+	- 에디너 좌측의 Place Actors - 'post' 검색 - post Process Volume 을 씬에 할당 
+	- Post Process Volume 을 클릭 -> 우측 하단의 Details 에 'infi' 검색 - Infinite Extent 를 체크
+	   ( PostProcess 작업을, 한정된 영역이 아닌, 씬의 모든 영역에서 처리되도록 하는 작업 )
+	- 씬의 PostProcess 다시 클릭 - Details 에 'material' 검색 - Array 에 하나 추가 - Asset Refenrece로 변경 - 준비한 것 할당 (예제에서는 'PP_HIGHLIGHT' )
+	- 표시되려는(?) BP 의 Mesh 컴퍼넌트 BP로 가서 (에디터 우측 하단으로 했음. 예제는), 'rendering' 검색 - 렌더링의 저... 밑에, Render Custom Depth pass 를 체크
+	- 바로 위 같은 rendering 에서, 'Custom Depth Stencil Value' 를 250 으로 변경 
+	 ※ 색상을 변경하려면, 예제의 PP_HIGHLIGHT에서 색상 변경 가능
+

@@ -47,11 +47,14 @@ void AR1Character::SetupPlayerInputComponent(UInputComponent* PlayerInputCompone
 void AR1Character::Highlight()
 {
 	bHighlighted = true;
+	GetMesh()->SetRenderCustomDepth(true);
+	GetMesh()->SetCustomDepthStencilValue(250);
 }
 
 void AR1Character::UnHighlight()
 {
 	bHighlighted = false;
+	GetMesh()->SetRenderCustomDepth(false);
 }
 
 void AR1Character::OnDamage(int32 Damage, TObjectPtr<AR1Character> from)
